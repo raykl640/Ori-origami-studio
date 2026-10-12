@@ -1,0 +1,38 @@
+# Builds ORI on Linux, macOS and Windows, runs the unit tests and uploads
+# the rendered evidence sheets as a downloadable artifact.
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Unit tests
+        if: hashFiles('tests/test_main.cpp') != ''
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Render evidence sheets
+        if: matrix.os == 'ubuntu-latest' && hashFiles('app/main.cpp') != ''
+        run: ./build/ori --out output
+
+      - name: Upload renders
+        if: matrix.os == 'ubuntu-latest' && hashFiles('app/main.cpp') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: ori-renders
+          path: output/

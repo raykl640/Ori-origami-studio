@@ -1,0 +1,16 @@
+# Fill in each member's GitHub username below, then rename this file to CODEOWNERS.
+# Each module has an owner who reviews changes to it.
+# Replace the placeholders with each member's GitHub username, e.g. @evans-mwendwa
+/src/core/        @raykl640
+/app/             @raykl640
+/tests/           @raykl640
+/docs/            @raykl640
+/src/math/        @MOHAMED_BILE_GITHUB
+/src/fold/        @MOHAMED_BILE_GITHUB
+/src/geometry/    @EVANS_MWENDWA_GITHUB
+/src/editor/      @EVANS_MWENDWA_GITHUB
+/src/raster/      @MATHEW_NGUITHI_GITHUB
+/src/curves/      @MATTHEW_WACHIRA_GITHUB
+/src/shading/     @MATTHEW_WACHIRA_GITHUB
+/src/layering/    @EDGAR_KAREITHI_GITHUB
+/src/models/      @EDGAR_KAREITHI_GITHUB
