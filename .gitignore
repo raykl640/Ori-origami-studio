@@ -1,0 +1,15 @@
+# build products
+build/
+cmake-build-*/
+*.o
+*.obj
+*.exe
+*.d
+# rendered output (regenerate with ./build/ori)
+output/
+# editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
