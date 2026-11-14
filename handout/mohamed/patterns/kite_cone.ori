@@ -1,0 +1,7 @@
+# ORI fold sequence
+name Kite cone
+paper  200 0  400 200  200 400  0 200
+start colour
+valley  200 0  82.84271247 282.8427125  Fold left edge to the centre
+valley  317.1572875 282.8427125  200 0  Fold right edge to the centre
+mountain  400 110  0 110  Fold the tip behind
