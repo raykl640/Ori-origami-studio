@@ -38,7 +38,7 @@ public:
 
     // Export - format picked from the extension (.png, .bmp, .ppm).
     bool save(const std::string& path) const;
-    bool savePNG(const std::string& path) const;
+    bool savePNG(const std::string& path, bool compress = true) const;   // false: stored blocks
     bool saveBMP(const std::string& path) const;
     bool savePPM(const std::string& path) const;
 

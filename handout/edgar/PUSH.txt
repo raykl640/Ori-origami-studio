@@ -1,0 +1,44 @@
+ORI package for Edgar Kareithi - Layering, models, studio layout and demo scaffolding
+23 files, 2080 lines
+
+Your commits (made for you by scripts/push_package.sh):
+  1. core+demos: bitmap font, sheet layout helpers and the demo registry
+  2. layering: painter's algorithm, translucency, exploded view, inspector
+  3. models: dog face, kite cone, napkin triangle and crane mascot
+  4. demos+tests: layering, characters and studio UI sheets, tests, notes, GitHub templates
+  5. studio: folded preview, layer inspector, file handling and dialogs
+
+Steps (any time, in any order relative to the others):
+  1. git switch main && git pull
+  2. sh scripts/push_package.sh edgar
+     (moves these files from handout/edgar/ into place and commits them
+      under your name; if you got them as a zip instead, unzip them into
+      the root of your clone first)
+  3. git push -u origin package/edgar   and open a pull request into main.
+
+Files:
+  [1] src/core/Font.h
+  [1] src/core/Font.cpp
+  [1] src/core/Layout.h
+  [1] src/core/Layout.cpp
+  [1] demos/Demos.h
+  [1] demos/Registry.cpp
+  [2] src/layering/LayerRenderer.h
+  [2] src/layering/LayerRenderer.cpp
+  [3] src/models/Models.h
+  [3] src/models/Models.cpp
+  [4] demos/11_layers_shading.cpp
+  [4] demos/12_characters.cpp
+  [4] demos/14_studio_ui.cpp
+  [4] tests/test_layering.cpp
+  [4] tests/test_layout.cpp
+  [4] docs/algorithms/layering-models.md
+  [4] .github/pull_request_template.md
+  [4] .github/ISSUE_TEMPLATE/bug_report.md
+  [4] .github/ISSUE_TEMPLATE/feature_task.md
+  [4] .github/CODEOWNERS.example
+  [5] studio/StudioPreview.cpp
+  [5] studio/StudioFiles.cpp
+  [5] studio/StudioDialogs.cpp
+
+Full plan: docs/PUSH_PLAN.md

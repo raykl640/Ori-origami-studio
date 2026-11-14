@@ -1,5 +1,13 @@
-# Builds ORI on Linux, macOS and Windows, runs the unit tests and uploads
-# the rendered evidence sheets as a downloadable artifact.
+# CI for ORI.
+#
+# Packages (see docs/PUSH_PLAN.md) can be merged in ANY order, so CI runs in
+# two stages:
+#   1. packages - on every push / PR: reports which member packages are in
+#      the tree and compiles every source file whose includes are all present
+#      (files waiting for another package are listed as "pending", not failed).
+#   2. build    - only once every package is present: full build on Linux,
+#      macOS and Windows (the SDL2 studio on Linux and macOS), unit tests,
+#      every render plus studio screenshots, and the images uploaded.
 name: build
 
 on:
@@ -7,7 +15,26 @@ on:
   pull_request:
 
 jobs:
+  packages:
+    runs-on: ubuntu-latest
+    outputs:
+      complete: ${{ steps.status.outputs.complete }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SDL2 (studio window)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libsdl2-dev
+
+      - name: Package status
+        id: status
+        run: sh scripts/ci_check.sh status >> "$GITHUB_OUTPUT"
+
+      - name: Compile everything whose dependencies are present
+        run: sh scripts/ci_check.sh partial
+
   build:
+    needs: packages
+    if: needs.packages.outputs.complete == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -16,6 +43,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install SDL2 (studio window; Windows builds without the studio)
+        if: matrix.os != 'windows-latest'
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = "Linux" ]; then sudo apt-get update -qq && sudo apt-get install -y -qq libsdl2-dev; fi
+          if [ "$RUNNER_OS" = "macOS" ]; then brew install sdl2; fi
+
       - name: Configure
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
@@ -23,15 +57,19 @@ jobs:
         run: cmake --build build --config Release
 
       - name: Unit tests
-        if: hashFiles('tests/test_main.cpp') != ''
         run: ctest --test-dir build -C Release --output-on-failure
 
-      - name: Render evidence sheets
-        if: matrix.os == 'ubuntu-latest' && hashFiles('app/main.cpp') != ''
-        run: ./build/ori --out output
+      - name: Render evidence sheets and fold the sample sequences
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          ./build/ori --out output
+          for f in patterns/*.ori; do ./build/ori fold "$f" --out output/folds; done
+          for f in patterns/*.cp; do ./build/ori render "$f" "output/folds/$(basename "$f" .cp).png"; done
+          ./build/ori_studio --screenshot output/studio_fold.png
+          ./build/ori_studio --screenshot output/studio_crease.png patterns/preliminary_base.cp
 
       - name: Upload renders
-        if: matrix.os == 'ubuntu-latest' && hashFiles('app/main.cpp') != ''
+        if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
           name: ori-renders

@@ -5,14 +5,18 @@
 //  Framebuffer + hand-written image encoders:
 //    * PPM (P6)  - simplest possible format, header + raw RGB
 //    * BMP       - 24-bit, bottom-up rows padded to 4 bytes (opens on Windows)
-//    * PNG       - zlib stream built from *stored* (uncompressed) deflate blocks,
-//                  with our own CRC-32 and Adler-32. No zlib / libpng needed.
+//    * PNG       - adaptive row filters (None/Sub/Up/Average/Paeth) and our own
+//                  DEFLATE compressor (Deflate.cpp), CRC-32 and Adler-32.
+//                  savePNG(path, false) writes stored (uncompressed) blocks.
+//                  No zlib / libpng needed.
 // ============================================================================
 #include "Image.h"
+#include "Deflate.h"
 #include <algorithm>
 #include <array>
 #include <cctype>
 #include <cstdint>
+#include <cstdlib>
 #include <fstream>
 
 namespace ori {
@@ -148,7 +152,46 @@ void writeChunk(std::ofstream& f, const char type[4], const std::vector<std::uin
 
 } // namespace
 
-bool Image::savePNG(const std::string& path) const {
+namespace {
+
+std::uint8_t paeth(int a, int b, int c) {
+    const int p = a + b - c, pa = std::abs(p - a), pb = std::abs(p - b), pc = std::abs(p - c);
+    if (pa <= pb && pa <= pc) return std::uint8_t(a);
+    return std::uint8_t(pb <= pc ? b : c);
+}
+
+// Filter one scanline with each of the 5 PNG filters and keep the one with
+// the smallest sum of |signed byte| - the usual heuristic, and it makes
+// flat-coloured rows almost all zeros.
+void filterRow(const std::uint8_t* cur, const std::uint8_t* prev, int len, std::vector<std::uint8_t>& out) {
+    const int bpp = 3;
+    std::vector<std::uint8_t> best, trial(static_cast<std::size_t>(len));
+    long bestScore = -1;
+    std::uint8_t bestType = 0;
+    for (std::uint8_t type = 0; type < 5; ++type) {
+        long score = 0;
+        for (int i = 0; i < len; ++i) {
+            const int a = i >= bpp ? cur[i - bpp] : 0, b = prev ? prev[i] : 0, c = (prev && i >= bpp) ? prev[i - bpp] : 0;
+            int pred = 0;
+            switch (type) {
+                case 1: pred = a; break;
+                case 2: pred = b; break;
+                case 3: pred = (a + b) / 2; break;
+                case 4: pred = paeth(a, b, c); break;
+                default: break;
+            }
+            trial[std::size_t(i)] = std::uint8_t(cur[i] - pred);
+            score += std::abs(int(std::int8_t(trial[std::size_t(i)])));
+        }
+        if (bestScore < 0 || score < bestScore) { bestScore = score; bestType = type; best = trial; }
+    }
+    out.push_back(bestType);
+    out.insert(out.end(), best.begin(), best.end());
+}
+
+} // namespace
+
+bool Image::savePNG(const std::string& path, bool compress) const {
     std::ofstream f(path, std::ios::binary);
     if (!f) return false;
     static const std::uint8_t sig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
@@ -159,33 +202,42 @@ bool Image::savePNG(const std::string& path) const {
     ihdr.insert(ihdr.end(), {8 /*bit depth*/, 2 /*RGB*/, 0, 0, 0});
     writeChunk(f, "IHDR", ihdr);
 
-    // Raw scanlines: filter byte 0 ("None") + RGB triples.
-    std::vector<std::uint8_t> raw;
-    raw.reserve(std::size_t(h_) * (w_ * 3 + 1));
-    for (int y = 0; y < h_; ++y) {
-        raw.push_back(0);
-        for (int x = 0; x < w_; ++x) {
-            const Color& c = px_[std::size_t(y) * w_ + x];
-            raw.push_back(c.r); raw.push_back(c.g); raw.push_back(c.b);
-        }
+    // RGB scanlines.
+    const int rowLen = w_ * 3;
+    std::vector<std::uint8_t> rgb(std::size_t(h_) * rowLen);
+    for (std::size_t i = 0; i < px_.size(); ++i) {
+        rgb[3 * i] = px_[i].r; rgb[3 * i + 1] = px_[i].g; rgb[3 * i + 2] = px_[i].b;
     }
 
-    // zlib wrapper around stored deflate blocks (max 65535 bytes each).
-    std::vector<std::uint8_t> z = {0x78, 0x01};
-    std::size_t pos = 0;
-    do {
-        const std::size_t len = std::min<std::size_t>(65535, raw.size() - pos);
-        const bool last = pos + len == raw.size();
-        z.push_back(last ? 1 : 0);
-        z.push_back(std::uint8_t(len & 0xFF));  z.push_back(std::uint8_t(len >> 8));
-        z.push_back(std::uint8_t(~len & 0xFF)); z.push_back(std::uint8_t((~len >> 8) & 0xFF));
-        z.insert(z.end(), raw.begin() + std::ptrdiff_t(pos), raw.begin() + std::ptrdiff_t(pos + len));
-        pos += len;
-    } while (pos < raw.size());
-
-    std::uint32_t a = 1, b = 0;                       // Adler-32 of the raw data
-    for (std::uint8_t byte : raw) { a = (a + byte) % 65521; b = (b + a) % 65521; }
-    pushBE32(z, (b << 16) | a);
+    std::vector<std::uint8_t> z;
+    if (compress) {
+        // Filtered scanlines (filter type byte + bytes), then DEFLATE.
+        std::vector<std::uint8_t> filtered;
+        filtered.reserve(std::size_t(h_) * (rowLen + 1));
+        for (int y = 0; y < h_; ++y)
+            filterRow(&rgb[std::size_t(y) * rowLen], y ? &rgb[std::size_t(y - 1) * rowLen] : nullptr, rowLen, filtered);
+        z = zlibCompress(filtered);
+    } else {
+        // Filter "None" + stored (uncompressed) deflate blocks of <= 65535 bytes.
+        std::vector<std::uint8_t> raw;
+        raw.reserve(std::size_t(h_) * (rowLen + 1));
+        for (int y = 0; y < h_; ++y) {
+            raw.push_back(0);
+            raw.insert(raw.end(), rgb.begin() + std::ptrdiff_t(y) * rowLen, rgb.begin() + std::ptrdiff_t(y + 1) * rowLen);
+        }
+        z = {0x78, 0x01};
+        std::size_t pos = 0;
+        do {
+            const std::size_t len = std::min<std::size_t>(65535, raw.size() - pos);
+            const bool last = pos + len == raw.size();
+            z.push_back(last ? 1 : 0);
+            z.push_back(std::uint8_t(len & 0xFF));  z.push_back(std::uint8_t(len >> 8));
+            z.push_back(std::uint8_t(~len & 0xFF)); z.push_back(std::uint8_t((~len >> 8) & 0xFF));
+            z.insert(z.end(), raw.begin() + std::ptrdiff_t(pos), raw.begin() + std::ptrdiff_t(pos + len));
+            pos += len;
+        } while (pos < raw.size());
+        pushBE32(z, adler32(raw));
+    }
 
     writeChunk(f, "IDAT", z);
     writeChunk(f, "IEND", {});

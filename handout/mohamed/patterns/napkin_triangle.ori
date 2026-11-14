@@ -1,0 +1,7 @@
+# ORI fold sequence
+name Napkin triangle
+paper  0 0  400 0  400 400  0 400
+start white
+valley  200 400  200 0  Book fold right to left
+mountain  0 200  200 200  Fold bottom half behind
+valley  200 200  0 0  Fold corner down to a triangle
