@@ -1,0 +1,161 @@
+# ORI package manifest - every file of the finished project belongs to exactly one member.
+# Read by scripts/ci_check.sh, scripts/push_package.sh and scripts/make_packages.sh.
+# Columns are TAB-separated:
+#   M  member  full name        area
+#   C  member  commit number    commit message
+#   F  member  commit number    path (a trailing /* or *.ext glob is allowed)
+# See docs/PUSH_PLAN.md.
+
+M	ray	Ray Lukorito	App shell, image export, build system, CI and docs
+C	ray	1	build: Make, CMake, build scripts, package tooling and package-aware CI
+F	ray	1	Makefile
+F	ray	1	CMakeLists.txt
+F	ray	1	build.sh
+F	ray	1	build.bat
+F	ray	1	.gitignore
+F	ray	1	.github/workflows/build.yml
+F	ray	1	scripts/packages.tsv
+F	ray	1	scripts/ci_check.sh
+F	ray	1	scripts/push_package.sh
+F	ray	1	scripts/make_packages.sh
+C	ray	2	core: framebuffer and PNG (row filters, chunks, CRC), BMP and PPM writers
+F	ray	2	src/core/Image.h
+F	ray	2	src/core/Image.cpp
+C	ray	3	app: the ori command line (demos, render, svg, fold, model)
+F	ray	3	app/main.cpp
+C	ray	4	docs: README, algorithm index, push plan and screenshots
+F	ray	4	README.md
+F	ray	4	docs/PUSH_PLAN.md
+F	ray	4	docs/screenshots/*
+C	ray	5	studio: interactive studio core (frame, layout, undo, shortcuts) and the SDL2 window shell
+F	ray	5	studio/Studio.h
+F	ray	5	studio/Studio.cpp
+F	ray	5	studio/sdl/main.cpp
+
+M	mathew	Mathew Nguithi	Rasterizer (lines, fills, clipping) and the test framework
+C	mathew	1	raster: DDA, Bresenham and Wu lines, styled crease strokes
+F	mathew	1	src/raster/Lines.h
+F	mathew	1	src/raster/Lines.cpp
+C	mathew	2	raster: scanline fill with ET/AET, flood and boundary fill
+F	mathew	2	src/raster/Fill.h
+F	mathew	2	src/raster/Fill.cpp
+C	mathew	3	raster: Cohen-Sutherland, Liang-Barsky, Cyrus-Beck, Sutherland-Hodgman
+F	mathew	3	src/raster/Clipping.h
+F	mathew	3	src/raster/Clipping.cpp
+C	mathew	4	demos+tests: line, line-operation and clipping sheets, test framework and raster tests
+F	mathew	4	demos/01_lines.cpp
+F	mathew	4	demos/02_line_operations.cpp
+F	mathew	4	demos/04_clipping_filling.cpp
+F	mathew	4	tests/test_raster.cpp
+F	mathew	4	docs/algorithms/raster.md
+F	mathew	4	tests/TestFramework.h
+F	mathew	4	tests/test_main.cpp
+F	mathew	4	tests/test_core.cpp
+C	mathew	5	studio: immediate-mode UI toolkit (buttons, toggles, sliders, text fields, lists)
+F	mathew	5	studio/Widgets.h
+F	mathew	5	studio/Widgets.cpp
+F	mathew	5	docs/STUDIO.md
+
+M	evans	Evans Mwendwa	Geometry, crease-pattern editor and file formats
+C	evans	1	geometry: segments, lines, intersection, projection, reflection
+F	evans	1	src/geometry/Line.h
+F	evans	1	src/geometry/Line.cpp
+C	evans	2	geometry: polygon representation, area, inside test, ear clipping, hull
+F	evans	2	src/geometry/Polygon.h
+F	evans	2	src/geometry/Polygon.cpp
+C	evans	3	editor+export: crease pattern model, snapping, .cp/.svg and the DEFLATE compressor
+F	evans	3	src/editor/CreasePattern.h
+F	evans	3	src/editor/CreasePattern.cpp
+F	evans	3	patterns/*.cp
+F	evans	3	src/core/Deflate.h
+F	evans	3	src/core/Deflate.cpp
+C	evans	4	editor: crease renderer, legend and face 2-colouring
+F	evans	4	src/editor/CreaseRenderer.h
+F	evans	4	src/editor/CreaseRenderer.cpp
+C	evans	5	demos+tests: polygon sheet, geometry, editor and compression tests, notes
+F	evans	5	demos/03_polygons.cpp
+F	evans	5	tests/test_geometry.cpp
+F	evans	5	tests/test_editor.cpp
+F	evans	5	tests/test_export.cpp
+F	evans	5	docs/algorithms/geometry-editor.md
+C	evans	6	studio: crease-pattern editor tab with flat-foldability checks
+F	evans	6	studio/StudioCrease.cpp
+
+M	mohamed	Mohamed Bile	2D transformations, fold engine and fold diagrams
+C	mohamed	1	math: Vec2 and Mat3 homogeneous transforms and reflections
+F	mohamed	1	src/math/Vec2.h
+F	mohamed	1	src/math/Mat3.h
+F	mohamed	1	src/math/Mat3.cpp
+C	mohamed	2	fold: fold engine (split, reflect, restack, crease generation)
+F	mohamed	2	src/fold/FoldEngine.h
+F	mohamed	2	src/fold/FoldEngine.cpp
+C	mohamed	3	fold: .ori fold-sequence files and sample sequences
+F	mohamed	3	src/fold/FoldSequence.h
+F	mohamed	3	src/fold/FoldSequence.cpp
+F	mohamed	3	patterns/*.ori
+C	mohamed	4	demos+tests: transformation sheet, fold-sequence diagram sheets, math and fold tests
+F	mohamed	4	demos/07_transformations.cpp
+F	mohamed	4	demos/08_10_fold_sequences.cpp
+F	mohamed	4	tests/test_math.cpp
+F	mohamed	4	tests/test_fold.cpp
+F	mohamed	4	docs/algorithms/fold-engine.md
+F	mohamed	4	demos/FoldSheets.cpp
+F	mohamed	4	docs/ALGORITHMS.md
+C	mohamed	5	studio: fold-sequence panel and drawing folds on the preview
+F	mohamed	5	studio/StudioFold.cpp
+
+M	matthew	Matthew Wachira	Colour, shading, curves, circles and GIF
+C	matthew	1	colour: colour maths, palettes, depth shading and lighting
+F	matthew	1	src/core/Color.h
+F	matthew	1	src/shading/Palette.h
+F	matthew	1	src/shading/Palette.cpp
+C	matthew	2	curves: Bezier, Catmull-Rom, B-spline, fold arrows and easing
+F	matthew	2	src/curves/Curves.h
+F	matthew	2	src/curves/Curves.cpp
+C	matthew	3	raster: midpoint circle and ellipse, arcs and rings
+F	matthew	3	src/raster/Circle.h
+F	matthew	3	src/raster/Circle.cpp
+C	matthew	4	export: animated GIF writer (colour cube, Bayer dither, LZW)
+F	matthew	4	src/core/GifWriter.h
+F	matthew	4	src/core/GifWriter.cpp
+C	matthew	5	demos+tests: circles, curves and animation sheets, tests, notes
+F	matthew	5	demos/05_circles_ellipses.cpp
+F	matthew	5	demos/06_curves.cpp
+F	matthew	5	demos/13_animation.cpp
+F	matthew	5	tests/test_curves.cpp
+F	matthew	5	tests/test_circles.cpp
+F	matthew	5	tests/test_colour.cpp
+F	matthew	5	docs/algorithms/curves-colour.md
+C	matthew	6	studio: depth palette, light dial, animation timeline and end-to-end studio tests
+F	matthew	6	studio/StudioPalette.cpp
+F	matthew	6	tests/test_studio.cpp
+
+M	edgar	Edgar Kareithi	Layering, models, studio layout and demo scaffolding
+C	edgar	1	core+demos: bitmap font, sheet layout helpers and the demo registry
+F	edgar	1	src/core/Font.h
+F	edgar	1	src/core/Font.cpp
+F	edgar	1	src/core/Layout.h
+F	edgar	1	src/core/Layout.cpp
+F	edgar	1	demos/Demos.h
+F	edgar	1	demos/Registry.cpp
+C	edgar	2	layering: painter's algorithm, translucency, exploded view, inspector
+F	edgar	2	src/layering/LayerRenderer.h
+F	edgar	2	src/layering/LayerRenderer.cpp
+C	edgar	3	models: dog face, kite cone, napkin triangle and crane mascot
+F	edgar	3	src/models/Models.h
+F	edgar	3	src/models/Models.cpp
+C	edgar	4	demos+tests: layering, characters and studio UI sheets, tests, notes, GitHub templates
+F	edgar	4	demos/11_layers_shading.cpp
+F	edgar	4	demos/12_characters.cpp
+F	edgar	4	demos/14_studio_ui.cpp
+F	edgar	4	tests/test_layering.cpp
+F	edgar	4	tests/test_layout.cpp
+F	edgar	4	docs/algorithms/layering-models.md
+F	edgar	4	.github/pull_request_template.md
+F	edgar	4	.github/ISSUE_TEMPLATE/bug_report.md
+F	edgar	4	.github/ISSUE_TEMPLATE/feature_task.md
+F	edgar	4	.github/CODEOWNERS.example
+C	edgar	5	studio: folded preview, layer inspector, file handling and dialogs
+F	edgar	5	studio/StudioPreview.cpp
+F	edgar	5	studio/StudioFiles.cpp
+F	edgar	5	studio/StudioDialogs.cpp

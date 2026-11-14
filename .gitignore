@@ -13,3 +13,15 @@ output/
 *.swp
 .DS_Store
 Thumbs.db
+# package hand-outs (scripts/make_packages.sh)
+dist/
+# designs saved / exported by ori_studio
+designs/
+# member hand-outs dropped into a clone (scripts/push_package.sh)
+/*.zip
+/ray/
+/mathew/
+/evans/
+/mohamed/
+/matthew/
+/edgar/
