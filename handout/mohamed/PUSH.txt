@@ -1,0 +1,37 @@
+ORI package for Mohamed Bile - 2D transformations, fold engine and fold diagrams
+19 files, 2002 lines
+
+Your commits (made for you by scripts/push_package.sh):
+  1. math: Vec2 and Mat3 homogeneous transforms and reflections
+  2. fold: fold engine (split, reflect, restack, crease generation)
+  3. fold: .ori fold-sequence files and sample sequences
+  4. demos+tests: transformation sheet, fold-sequence diagram sheets, math and fold tests
+  5. studio: fold-sequence panel and drawing folds on the preview
+
+Steps (any time, in any order relative to the others):
+  1. git switch main && git pull
+  2. sh scripts/push_package.sh mohamed
+     (moves these files from handout/mohamed/ into place and commits them
+      under your name; if you got them as a zip instead, unzip them into
+      the root of your clone first)
+  3. git push -u origin package/mohamed   and open a pull request into main.
+
+Files:
+  [1] src/math/Vec2.h
+  [1] src/math/Mat3.h
+  [1] src/math/Mat3.cpp
+  [2] src/fold/FoldEngine.h
+  [2] src/fold/FoldEngine.cpp
+  [3] src/fold/FoldSequence.h
+  [3] src/fold/FoldSequence.cpp
+  [3] patterns/*.ori
+  [4] demos/07_transformations.cpp
+  [4] demos/08_10_fold_sequences.cpp
+  [4] tests/test_math.cpp
+  [4] tests/test_fold.cpp
+  [4] docs/algorithms/fold-engine.md
+  [4] demos/FoldSheets.cpp
+  [4] docs/ALGORITHMS.md
+  [5] studio/StudioFold.cpp
+
+Full plan: docs/PUSH_PLAN.md

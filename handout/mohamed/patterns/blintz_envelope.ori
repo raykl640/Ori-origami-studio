@@ -1,0 +1,12 @@
+# ORI fold sequence - a design that is not built into the program.
+# Fold all four corners to the centre (the blintz base), then fold in half.
+# Each fold line is a -> b in the CURRENT folded coordinates; the paper to
+# the right of a -> b on screen (y pointing down) is the part that moves.
+name Blintz envelope
+paper  0 0  400 0  400 400  0 400
+start white
+valley    200 0    0 200    Top-left corner to the centre
+valley    400 200  200 0    Top-right corner to the centre
+valley    200 400  400 200  Bottom-right corner to the centre
+valley    0 200    200 400  Bottom-left corner to the centre
+valley    0 200    400 200  Fold the bottom half up

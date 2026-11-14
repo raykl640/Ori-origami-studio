@@ -1,0 +1,38 @@
+ORI package for Mathew Nguithi - Rasterizer (lines, fills, clipping) and the test framework
+17 files, 2020 lines
+
+Your commits (made for you by scripts/push_package.sh):
+  1. raster: DDA, Bresenham and Wu lines, styled crease strokes
+  2. raster: scanline fill with ET/AET, flood and boundary fill
+  3. raster: Cohen-Sutherland, Liang-Barsky, Cyrus-Beck, Sutherland-Hodgman
+  4. demos+tests: line, line-operation and clipping sheets, test framework and raster tests
+  5. studio: immediate-mode UI toolkit (buttons, toggles, sliders, text fields, lists)
+
+Steps (any time, in any order relative to the others):
+  1. git switch main && git pull
+  2. sh scripts/push_package.sh mathew
+     (moves these files from handout/mathew/ into place and commits them
+      under your name; if you got them as a zip instead, unzip them into
+      the root of your clone first)
+  3. git push -u origin package/mathew   and open a pull request into main.
+
+Files:
+  [1] src/raster/Lines.h
+  [1] src/raster/Lines.cpp
+  [2] src/raster/Fill.h
+  [2] src/raster/Fill.cpp
+  [3] src/raster/Clipping.h
+  [3] src/raster/Clipping.cpp
+  [4] demos/01_lines.cpp
+  [4] demos/02_line_operations.cpp
+  [4] demos/04_clipping_filling.cpp
+  [4] tests/test_raster.cpp
+  [4] docs/algorithms/raster.md
+  [4] tests/TestFramework.h
+  [4] tests/test_main.cpp
+  [4] tests/test_core.cpp
+  [5] studio/Widgets.h
+  [5] studio/Widgets.cpp
+  [5] docs/STUDIO.md
+
+Full plan: docs/PUSH_PLAN.md

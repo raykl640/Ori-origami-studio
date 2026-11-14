@@ -1,0 +1,40 @@
+ORI package for Matthew Wachira - Colour, shading, curves, circles and GIF
+18 files, 2042 lines
+
+Your commits (made for you by scripts/push_package.sh):
+  1. colour: colour maths, palettes, depth shading and lighting
+  2. curves: Bezier, Catmull-Rom, B-spline, fold arrows and easing
+  3. raster: midpoint circle and ellipse, arcs and rings
+  4. export: animated GIF writer (colour cube, Bayer dither, LZW)
+  5. demos+tests: circles, curves and animation sheets, tests, notes
+  6. studio: depth palette, light dial, animation timeline and end-to-end studio tests
+
+Steps (any time, in any order relative to the others):
+  1. git switch main && git pull
+  2. sh scripts/push_package.sh matthew
+     (moves these files from handout/matthew/ into place and commits them
+      under your name; if you got them as a zip instead, unzip them into
+      the root of your clone first)
+  3. git push -u origin package/matthew   and open a pull request into main.
+
+Files:
+  [1] src/core/Color.h
+  [1] src/shading/Palette.h
+  [1] src/shading/Palette.cpp
+  [2] src/curves/Curves.h
+  [2] src/curves/Curves.cpp
+  [3] src/raster/Circle.h
+  [3] src/raster/Circle.cpp
+  [4] src/core/GifWriter.h
+  [4] src/core/GifWriter.cpp
+  [5] demos/05_circles_ellipses.cpp
+  [5] demos/06_curves.cpp
+  [5] demos/13_animation.cpp
+  [5] tests/test_curves.cpp
+  [5] tests/test_circles.cpp
+  [5] tests/test_colour.cpp
+  [5] docs/algorithms/curves-colour.md
+  [6] studio/StudioPalette.cpp
+  [6] tests/test_studio.cpp
+
+Full plan: docs/PUSH_PLAN.md

@@ -1,0 +1,39 @@
+ORI package for Evans Mwendwa - Geometry, crease-pattern editor and file formats
+19 files, 2083 lines
+
+Your commits (made for you by scripts/push_package.sh):
+  1. geometry: segments, lines, intersection, projection, reflection
+  2. geometry: polygon representation, area, inside test, ear clipping, hull
+  3. editor+export: crease pattern model, snapping, .cp/.svg and the DEFLATE compressor
+  4. editor: crease renderer, legend and face 2-colouring
+  5. demos+tests: polygon sheet, geometry, editor and compression tests, notes
+  6. studio: crease-pattern editor tab with flat-foldability checks
+
+Steps (any time, in any order relative to the others):
+  1. git switch main && git pull
+  2. sh scripts/push_package.sh evans
+     (moves these files from handout/evans/ into place and commits them
+      under your name; if you got them as a zip instead, unzip them into
+      the root of your clone first)
+  3. git push -u origin package/evans   and open a pull request into main.
+
+Files:
+  [1] src/geometry/Line.h
+  [1] src/geometry/Line.cpp
+  [2] src/geometry/Polygon.h
+  [2] src/geometry/Polygon.cpp
+  [3] src/editor/CreasePattern.h
+  [3] src/editor/CreasePattern.cpp
+  [3] patterns/*.cp
+  [3] src/core/Deflate.h
+  [3] src/core/Deflate.cpp
+  [4] src/editor/CreaseRenderer.h
+  [4] src/editor/CreaseRenderer.cpp
+  [5] demos/03_polygons.cpp
+  [5] tests/test_geometry.cpp
+  [5] tests/test_editor.cpp
+  [5] tests/test_export.cpp
+  [5] docs/algorithms/geometry-editor.md
+  [6] studio/StudioCrease.cpp
+
+Full plan: docs/PUSH_PLAN.md
