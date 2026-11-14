@@ -1,0 +1,9 @@
+# ORI fold sequence
+name Dog face
+paper  200 0  400 200  200 400  0 200
+start white
+valley  400 200  0 200  Fold top corner down
+valley  172 200  52 252  Fold left ear down
+valley  348 252  228 200  Fold right ear down
+valley  0 350  400 350  Fold snout up
+decorate dog
