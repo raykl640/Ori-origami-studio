@@ -54,4 +54,4 @@ Each owner documents the algorithms in their own area. Use these notes for the v
 ## Build and CI
 
 * `make`, `cmake` and `build.sh`/`build.bat` all build the same three things: the library (`src/*/*.cpp`), the `ori` program (`app/` + `demos/`) and `ori_tests`.
-* CI (`.github/workflows/build.yml`) works in two stages. The first runs `scripts/ci_check.sh` on every push: it reports which member packages are present and compiles every file whose includes exist, listing the rest as *pending*. Once all packages are in, the second stage builds on Linux, macOS and Windows, runs the tests, renders every sheet, folds every `patterns/*.ori` and uploads the images. See [PUSH_PLAN.md](PUSH_PLAN.md).
+* CI (`.github/workflows/build.yml`) builds on Linux, macOS and Windows on every push and pull request, runs the tests, renders every sheet, folds every `patterns/*.ori`, takes two studio screenshots and uploads the images.

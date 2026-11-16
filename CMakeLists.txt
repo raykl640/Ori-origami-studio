@@ -20,14 +20,14 @@ endif()
 # The library: every module of src/ (one folder per module and owner).
 file(GLOB ORI_LIB_SOURCES CONFIGURE_DEPENDS src/*/*.cpp)
 if(NOT ORI_LIB_SOURCES)
-  message(WARNING "No sources in src/ yet - run scripts/ci_check.sh status to see which packages are missing.")
+  message(WARNING "No sources in src/ - nothing to build.")
   return()
 endif()
 add_library(ori_lib STATIC ${ORI_LIB_SOURCES})
 target_include_directories(ori_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-# The app, the studio and the tests are added once their folders exist, so
-# the library can still be configured while packages are being pushed.
+# The app, the studio and the tests are added when their folders exist, so
+# the library can also be configured on its own.
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/demos/Registry.cpp AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/studio/Studio.cpp)
   # Demos + studio UI (no windowing code) - shared by ori, ori_studio and the tests.
   file(GLOB ORI_DEMO_SOURCES CONFIGURE_DEPENDS demos/*.cpp)

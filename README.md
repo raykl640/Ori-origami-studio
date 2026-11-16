@@ -17,18 +17,16 @@
 
 ## Group members and responsibilities (Group 1)
 
-Every file belongs to exactly one member. The full list is in [`scripts/packages.tsv`](scripts/packages.tsv), and each file's header names its owner. Run `ori list` to see who owns each evidence sheet.
+Every file belongs to exactly one member, and each file's header names its owner. Run `ori list` to see who owns each evidence sheet.
 
 | Member | Area | Main folders and files |
 |---|---|---|
-| **Ray Lukorito** | App shell, studio core and window, image export, build system, CI, docs | `app/`, `studio/Studio.*`, `studio/sdl/`, `src/core/Image.*`, build files, `.github/workflows/`, `scripts/`, `README.md`, `docs/PUSH_PLAN.md` |
+| **Ray Lukorito** | App shell, studio core and window, image export, build system, CI, docs | `app/`, `studio/Studio.*`, `studio/sdl/`, `src/core/Image.*`, build files, `.github/workflows/`, `README.md` |
 | **Mathew Nguithi** | Rasterizer, studio UI toolkit, test framework | `src/raster/Lines.*`, `Fill.*`, `Clipping.*`, `studio/Widgets.*`, demos 01, 02, 04, `tests/TestFramework.h`, `docs/STUDIO.md` |
 | **Evans Mwendwa** | Geometry, crease-pattern editor (library and studio tab), file formats | `src/geometry/`, `src/editor/`, `studio/StudioCrease.cpp`, `src/core/Deflate.*`, `patterns/*.cp`, demo 03 |
 | **Mohamed Bile** | 2D transformations, fold engine, fold diagrams, studio fold tool | `src/math/`, `src/fold/`, `studio/StudioFold.cpp`, `patterns/*.ori`, demos 07–10, `docs/ALGORITHMS.md` |
 | **Matthew Wachira** | Colour, shading, curves, circles, GIF, studio palette and timeline | `src/curves/`, `src/shading/`, `src/raster/Circle.*`, `src/core/Color.h`, `src/core/GifWriter.*`, `studio/StudioPalette.cpp`, `tests/test_studio.cpp`, demos 05, 06, 13 |
 | **Edgar Kareithi** | Layering, models, studio layout, preview, files and dialogs | `src/layering/`, `src/models/`, `src/core/Font.*`, `src/core/Layout.*`, `studio/StudioPreview.cpp`, `StudioFiles.cpp`, `StudioDialogs.cpp`, demo registry, demos 11, 12, 14 |
-
-How the team pushes work, in any order and in roughly equal shares, is described in **[`docs/PUSH_PLAN.md`](docs/PUSH_PLAN.md)**.
 
 ## Technologies and tools
 
@@ -37,7 +35,7 @@ How the team pushes work, in any order and in roughly equal shares, is described
 * **Compilers tested:** g++ and clang++, with zero warnings under `-Wall -Wextra -Wpedantic -Wshadow`. MSVC is supported through CMake.
 * **Output formats:** PNG (compressed), BMP, PPM, animated GIF, SVG and `.cp`, all written by our own code
 * **Window (studio only):** SDL2, used only to show our framebuffer and read input. Without SDL2 everything else still builds.
-* **Version control and CI:** Git and GitHub. CI is package-aware: it compiles whatever is present on every push, then once all packages are in it builds and tests on Linux, macOS and Windows and uploads the renders.
+* **Version control and CI:** Git and GitHub. CI builds and tests on Linux, macOS and Windows on every push and uploads the renders.
 
 ## Graphics techniques and algorithms
 
@@ -79,8 +77,7 @@ ori-origami-studio/
 │   └── sdl/main.cpp         the SDL2 window shell (the only file that touches SDL)
 ├── tests/                   dependency-free unit tests
 ├── patterns/                sample crease patterns (.cp) and fold sequences (.ori)
-├── docs/                    algorithm notes, push plan, screenshots
-├── scripts/                 package manifest and package / CI tools
+├── docs/                    algorithm notes, studio guide, screenshots
 ├── .github/                 CI workflow, issue and PR templates, CODEOWNERS example
 ├── Makefile  CMakeLists.txt  build.sh  build.bat
 ```
@@ -170,7 +167,6 @@ Rendering all 14 sheets takes about two seconds.
 
 * [`docs/ALGORITHMS.md`](docs/ALGORITHMS.md): how each algorithm works and where to find it, one page per area. Useful for the viva.
 * [`docs/STUDIO.md`](docs/STUDIO.md): the studio user guide.
-* [`docs/PUSH_PLAN.md`](docs/PUSH_PLAN.md): how each member pushes their package.
 * `ORI_Checkpoint_Evidence (1).pdf` and `ori-origami-studio.pptx`: the checkpoint evidence and the proposal slides.
 
 ## Screenshots

@@ -3,7 +3,6 @@
 #              make run      (render every demo into output/)
 #              make studio   (the interactive studio, needs SDL2)
 #              make lib      (library modules only)
-#              make packages (which member packages are in the tree)
 #              make clean
 CXX      ?= g++
 CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra -Wpedantic
@@ -29,11 +28,11 @@ APP    := build/ori$(EXE)
 STUDIO := build/ori_studio$(EXE)
 TEST   := build/ori_tests$(EXE)
 
-.PHONY: all lib test run studio run-studio packages clean
+.PHONY: all lib test run studio run-studio clean
 
 all: $(APP) $(if $(SDL_LIBS),$(STUDIO))
 
-# Library only - useful while packages are still being pushed.
+# Library modules only.
 lib: $(LIB_OBJ)
 
 $(APP): $(LIB_OBJ) $(DEMO_OBJ) build/app/main.o
@@ -63,9 +62,6 @@ studio: $(STUDIO)
 
 run-studio: $(STUDIO)
 	./$(STUDIO)
-
-packages:
-	@sh scripts/ci_check.sh status
 
 clean:
 	rm -rf build output
